@@ -6,23 +6,37 @@ import Number from './Number';
 import {shuffle} from '../helpers/shuffle.js';
 
 export default class Game extends React.Component {
+  state = {
+    selectedNumbers: []
+  };
+
+  hasBeenSelected = (index) =>  this.state.selectedNumbers.indexOf(index) >= 0;
+  
+  selectNumber = (index) => {
+      this.setState((prevState) => {
+        return {selectedNumbers: [...prevState.selectedNumbers, index]}
+      })
+    }
+
+  numbers = Array.from({length: this.props.randomNumbers}).map(() => Math.floor(Math.random() * 10) + 1);
+  target = this.numbers.slice(0, 4).reduce((sum, num) => sum += num)
+  randomNumbers = shuffle(this.numbers)
+
   render() {
-    let selectedNumbers = [];
-
-    let hasBeenSelected = (index) =>  selectedNumbers.indexOf(index) >= 0;
-
-    let numbers = Array.from({length: this.props.randomNumbers}).map(() => Math.floor(Math.random() * 10) + 1);
-    let target = numbers.slice(0, 4).reduce((sum, num) => sum += num)
-
-    let numbersMarkup = shuffle(numbers).map((num, index) => {
+    let numbersMarkup = this.randomNumbers.map((num, index) => {
       return (
-        <Number key={index} number={num} selected={hasBeenSelected(index)}/>
+        <Number 
+          key={index} 
+          id={index}
+          number={num} 
+          selected={this.hasBeenSelected(index)} 
+          onPress={this.selectNumber}/>
         )
     })
 
     return (
       <View style={styles.container}>
-        <Text style={styles.target}>{target}</Text>
+        <Text style={styles.target}>{this.target}</Text>
         <View style={styles.numbersContainer}>{numbersMarkup}</View>
       </View>
     );
