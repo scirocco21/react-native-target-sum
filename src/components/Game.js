@@ -54,7 +54,7 @@ export default class Game extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Text style={styles.target}>{this.target}</Text>
+        <Text style={[styles.target, styles[`${this.gameStatus()}`]]}>{this.target}</Text>
         <View style={styles.numbersContainer}>{numbersMarkup}</View>
       </View>
     );
@@ -72,12 +72,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 15,
     padding: 20,
-    backgroundColor: '#FFE9B2',
   },
   numbersContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
     marginTop: 100,
+  },
+  playing: {
+    backgroundColor: '#FFE9B2'
+  },
+  lost: {
+    backgroundColor: '#FFB2B2'
+  },
+  won: {
+    backgroundColor: '#8ECC8E'
   }
 });
