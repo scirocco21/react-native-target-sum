@@ -2,12 +2,13 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 export default class Number extends React.Component {
+  handlePress = () => {
+    if (this.props.selected) { return };
+    this.props.onPress(this.props.id);
+  }
   render() {
-    handlePress = () => {
-      console.log(this.props.number)
-    }
     return(
-      <TouchableOpacity onPress={handlePress}>
+      <TouchableOpacity onPress={this.handlePress}>
          <Text style={[styles.number, this.props.selected && styles.selected]}>{this.props.number}</Text>
       </TouchableOpacity>
     );
