@@ -1,19 +1,21 @@
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
+import Number from './Number';
+
 import {shuffle} from '../helpers/shuffle.js';
 
 export default class Game extends React.Component {
   render() {
     let array = [1,5];
     
-    let addableNumbers = Array.from({length: this.props.randomNumbers}).map(() => Math.floor(Math.random() * 10));
+    let addableNumbers = Array.from({length: this.props.randomNumbers}).map(() => Math.floor(Math.random() * 10) + 1);
     let target = addableNumbers.slice(0, 4).reduce((sum, num) => sum += num)
 
     let addables = shuffle(addableNumbers).map(num => {
       return (
-        <Text style={styles.addable}>{num}</Text>
-      )
+        <Number number={num}/>
+        )
     })
 
     return (
