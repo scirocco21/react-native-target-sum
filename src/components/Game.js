@@ -7,7 +7,8 @@ import {shuffle} from '../helpers/shuffle.js';
 
 export default class Game extends React.Component {
   state = {
-    selectedNumbers: []
+    selectedNumbers: [],
+    remainingSeconds: this.props.remainingSeconds
   };
 
   hasBeenSelected = (index) =>  this.state.selectedNumbers.indexOf(index) >= 0;
@@ -22,21 +23,32 @@ export default class Game extends React.Component {
   target = this.numbers.slice(0, 4).reduce((sum, num) => sum += num)
   randomNumbers = shuffle(this.numbers)
 
+  componentDidMount() {
+    currentInterval = setInterval(() => {
+      this.setState((prevState) => {
+        return {remainingSeconds: prevState.remainingSeconds -1 }
+      }, () => {
+        if (this.state.remainingSeconds === 0 || this.gameStatus() !== 'playing') {
+          clearInterval(currentInterval)
+        }
+      })
+    }, 1000)
+  }
+
   gameStatus = () => {
-    let status;
     const gameSum = this.state.selectedNumbers.reduce((sum, currentValue) => {
       return sum + this.numbers[currentValue];
     }, 0)
-
-    if (gameSum < this.target) {
-      status = "playing";
-    } else if (gameSum === this.target) {
-      status = "won";
-    } else {
-      status = "lost";
+    if (this.state.remainingSeconds === 0) {
+      return "lost";
     }
-    console.log(status, gameSum);
-    return status;
+    if (gameSum < this.target) {
+      return "playing"
+    } else if (gameSum === this.target) {
+      return "won";
+    } else {
+      return "lost";
+    }
   }
 
   render() {
@@ -56,6 +68,7 @@ export default class Game extends React.Component {
       <View style={styles.container}>
         <Text style={[styles.target, styles[`${this.gameStatus()}`]]}>{this.target}</Text>
         <View style={styles.numbersContainer}>{numbersMarkup}</View>
+        <Text>{this.state.remainingSeconds}</Text>
       </View>
     );
   }

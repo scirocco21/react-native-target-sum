@@ -16,7 +16,7 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>{appName}</Text>
-        <Game randomNumbers = {6} />
+        <Game randomNumbers={6} remainingSeconds={10}/>
       </View>
     );
   }
