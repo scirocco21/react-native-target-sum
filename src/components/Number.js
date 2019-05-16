@@ -9,7 +9,7 @@ export default class Number extends React.Component {
   render() {
     return(
       <TouchableOpacity onPress={this.handlePress}>
-         <Text style={[styles.number, this.props.selected && styles.selected]}>{this.props.number}</Text>
+         <Text style={[styles.number, this.props.disabled && styles.disabled]}>{this.props.number}</Text>
       </TouchableOpacity>
     );
   }
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#FF977E',
   },
-  selected: {
+  disabled: {
     opacity: 0.3
   }
 });

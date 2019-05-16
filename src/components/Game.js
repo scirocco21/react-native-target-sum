@@ -47,7 +47,7 @@ export default class Game extends React.Component {
           key={index} 
           id={index}
           number={num} 
-          selected={this.hasBeenSelected(index)} 
+          disabled={this.hasBeenSelected(index) || this.gameStatus() !== 'playing'} 
           onPress={this.selectNumber}/>
         )
     })
