@@ -22,7 +22,25 @@ export default class Game extends React.Component {
   target = this.numbers.slice(0, 4).reduce((sum, num) => sum += num)
   randomNumbers = shuffle(this.numbers)
 
+  gameStatus = () => {
+    let status;
+    const gameSum = this.state.selectedNumbers.reduce((sum, currentValue) => {
+      return sum + this.numbers[currentValue];
+    }, 0)
+
+    if (gameSum < this.target) {
+      status = "playing";
+    } else if (gameSum === this.target) {
+      status = "won";
+    } else {
+      status = "lost";
+    }
+    console.log(status, gameSum);
+    return status;
+  }
+
   render() {
+    this.gameStatus();
     let numbersMarkup = this.randomNumbers.map((num, index) => {
       return (
         <Number 
