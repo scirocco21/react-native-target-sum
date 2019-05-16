@@ -7,21 +7,23 @@ import {shuffle} from '../helpers/shuffle.js';
 
 export default class Game extends React.Component {
   render() {
-    let array = [1,5];
-    
-    let addableNumbers = Array.from({length: this.props.randomNumbers}).map(() => Math.floor(Math.random() * 10) + 1);
-    let target = addableNumbers.slice(0, 4).reduce((sum, num) => sum += num)
+    let selectedNumbers = [];
 
-    let addables = shuffle(addableNumbers).map(num => {
+    let hasBeenSelected = (index) =>  selectedNumbers.indexOf(index) >= 0;
+
+    let numbers = Array.from({length: this.props.randomNumbers}).map(() => Math.floor(Math.random() * 10) + 1);
+    let target = numbers.slice(0, 4).reduce((sum, num) => sum += num)
+
+    let numbersMarkup = shuffle(numbers).map((num, index) => {
       return (
-        <Number number={num}/>
+        <Number key={index} number={num} selected={hasBeenSelected(index)}/>
         )
     })
 
     return (
       <View style={styles.container}>
         <Text style={styles.target}>{target}</Text>
-        <View style={styles.numbersContainer}>{addables}</View>
+        <View style={styles.numbersContainer}>{numbersMarkup}</View>
       </View>
     );
   }
@@ -45,12 +47,5 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'center',
     marginTop: 100,
-  },
-  addable: {
-    fontSize: 30,
-    textAlign: 'center',
-    margin: 25,
-    padding: 20,
-    backgroundColor: '#FF977E',
   }
 });
