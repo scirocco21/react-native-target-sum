@@ -32,7 +32,6 @@ export default class Game extends React.Component {
     })
   }
 
-
   componentDidMount() {
     currentInterval = setInterval(() => {
       this.setState((prevState) => {
@@ -44,7 +43,6 @@ export default class Game extends React.Component {
       })
     }, 1000)
   }
-
 
   calculateGameStatus = (nextState) => {
     const gameSum = nextState.selectedNumbers.reduce((sum, currentValue) => {
@@ -84,7 +82,9 @@ export default class Game extends React.Component {
       <View style={styles.container}>
         <Text style={[styles.target, styles[`${this.gameStatus}`]]}>{this.target}</Text>
         <View style={styles.numbersContainer}>{numbersMarkup}</View>
-        <Text>{this.state.remainingSeconds}</Text>
+        <View style={styles.counterContainer}>
+          <Text style={styles.counter}>{this.state.remainingSeconds}</Text>
+        </View>
       </View>
     );
   }
@@ -107,6 +107,15 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'center',
     marginTop: 100,
+  },
+  counterContainer: {
+    backgroundColor: '#669999',
+    marginTop: 50,
+    borderRadius: 100
+  },
+  counter: {
+    fontSize: 70,
+    padding: 20
   },
   playing: {
     backgroundColor: '#FFE9B2'
