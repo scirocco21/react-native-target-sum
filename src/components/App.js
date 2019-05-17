@@ -7,16 +7,31 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {name as appName} from '../../app.json';
 import Game from './Game.js';
 
 export default class App extends React.Component {
+  state = {
+    gameId: 1
+  }
+
+  resetGame = () => {
+    this.setState((prevState) => {
+      return {gameId: prevState.gameId + 1};
+    })
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>{appName}</Text>
-        <Game randomNumbers={6} remainingSeconds={10}/>
+        <Game 
+          key={this.state.gameId} 
+          randomNumbers={6} 
+          remainingSeconds={10}
+          resetGame={this.resetGame}
+        />
       </View>
     );
   }
