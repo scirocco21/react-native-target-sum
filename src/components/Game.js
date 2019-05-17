@@ -11,35 +11,46 @@ export default class Game extends React.Component {
     remainingSeconds: this.props.remainingSeconds
   };
 
+  numbers = Array
+    .from({length: this.props.randomNumbers})
+    .map(() => Math.floor(Math.random() * 10) + 1);
+
+  target = this.numbers
+    .slice(0, 4)
+    .reduce((sum, num) => sum += num);
+
+  randomNumbers = shuffle(this.numbers);
+
+  gameStatus = 'playing';
+
+
   hasBeenSelected = (index) =>  this.state.selectedNumbers.indexOf(index) >= 0;
   
   selectNumber = (index) => {
-      this.setState((prevState) => {
-        return {selectedNumbers: [...prevState.selectedNumbers, index]}
-      })
-    }
+    this.setState((prevState) => {
+      return {selectedNumbers: [...prevState.selectedNumbers, index]}
+    })
+  }
 
-  numbers = Array.from({length: this.props.randomNumbers}).map(() => Math.floor(Math.random() * 10) + 1);
-  target = this.numbers.slice(0, 4).reduce((sum, num) => sum += num)
-  randomNumbers = shuffle(this.numbers)
 
   componentDidMount() {
     currentInterval = setInterval(() => {
       this.setState((prevState) => {
         return {remainingSeconds: prevState.remainingSeconds -1 }
       }, () => {
-        if (this.state.remainingSeconds === 0 || this.gameStatus() !== 'playing') {
+        if (this.state.remainingSeconds === 0) {
           clearInterval(currentInterval)
         }
       })
     }, 1000)
   }
 
-  gameStatus = () => {
-    const gameSum = this.state.selectedNumbers.reduce((sum, currentValue) => {
+
+  calculateGameStatus = (nextState) => {
+    const gameSum = nextState.selectedNumbers.reduce((sum, currentValue) => {
       return sum + this.numbers[currentValue];
     }, 0)
-    if (this.state.remainingSeconds === 0) {
+    if (nextState.remainingSeconds === 0) {
       return "lost";
     }
     if (gameSum < this.target) {
@@ -51,22 +62,27 @@ export default class Game extends React.Component {
     }
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    if (this.state.selectedNumbers !== nextState.selectedNumbers || nextState.remainingSeconds === 0) {
+      this.gameStatus = this.calculateGameStatus(nextState)
+    }
+  }
+
   render() {
-    this.gameStatus();
     let numbersMarkup = this.randomNumbers.map((num, index) => {
       return (
         <Number 
           key={index} 
           id={index}
           number={num} 
-          disabled={this.hasBeenSelected(index) || this.gameStatus() !== 'playing'} 
+          disabled={this.hasBeenSelected(index) || this.gameStatus !== 'playing'} 
           onPress={this.selectNumber}/>
         )
     })
 
     return (
       <View style={styles.container}>
-        <Text style={[styles.target, styles[`${this.gameStatus()}`]]}>{this.target}</Text>
+        <Text style={[styles.target, styles[`${this.gameStatus}`]]}>{this.target}</Text>
         <View style={styles.numbersContainer}>{numbersMarkup}</View>
         <Text>{this.state.remainingSeconds}</Text>
       </View>
