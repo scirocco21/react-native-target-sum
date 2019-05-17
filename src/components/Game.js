@@ -1,6 +1,6 @@
 
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Button} from 'react-native';
 import Number from './Number';
 
 import {shuffle} from '../helpers/shuffle.js';
@@ -85,6 +85,12 @@ export default class Game extends React.Component {
         <View style={styles.counterContainer}>
           <Text style={styles.counter}>{this.state.remainingSeconds}</Text>
         </View>
+        {this.gameStatus !== 'playing' && <Button
+          onPress={this.props.resetGame}
+          title="Play Again"
+          color="#841584"
+          accessibilityLabel="Restart the game"
+        />}
       </View>
     );
   }
